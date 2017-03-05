@@ -13,8 +13,8 @@ module.exports = function (config) {
       require('angular-cli/plugins/karma')
     ],
     files: [
-      { pattern: './src/test.ts', watched: false },
-      'node_modules/jasmine-data_driven_tests/all.js'
+      './node_modules/jasmine-data_driven_tests/src/all.js',
+      { pattern: './src/test.ts', watched: false }
     ],
     preprocessors: {
       './src/test.ts': ['angular-cli']

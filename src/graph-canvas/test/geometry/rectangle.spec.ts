@@ -1,7 +1,4 @@
 import { Rectangle } from './../../src/geometry/rectangle';
-// import { all } from 'jasmine-data_driven_tests';
-
-import { all } from './../../../jasmine-cases/cases';
 
 describe('Rectangle', () => {
 
