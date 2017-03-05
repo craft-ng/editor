@@ -20,8 +20,11 @@ before_install:
 before_script:
   - npm install -g @angular/cli
 script:
-  - ng test --single-run
+  - ng test --single-run --code-coverage
   #- ng build --prod --aot=false
+after_success:
+  # https://www.gregjs.com/javascript/2016/how-to-get-a-shiny-coverage-badge-for-your-github-project/
+  - cat ./coverage/lcov.info | node node_modules/.bin/coveralls 
 notifications:
   email:
     on_failure: change
