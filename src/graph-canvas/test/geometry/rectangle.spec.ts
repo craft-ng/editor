@@ -45,7 +45,7 @@ describe('Rectangle', () => {
             { x: -8, y: 16, w: 12, h: 13, perimeter: 2 * 12 + 2 * 13 },
             { x: -8, y: 16, w: 10, h: 10, perimeter: 40 }
         ], (rectData) => {
-            let rectangle = new Rectangle(rectData.x, rectData.y, rectData.w, rectData.h);
+            const rectangle = new Rectangle(rectData.x, rectData.y, rectData.w, rectData.h);
             expect(rectangle.getPerimeter()).toBe(rectData.perimeter);
         });
     });
