@@ -13,7 +13,7 @@ import { GraphCanvasComponent } from './graph-canvas/graph-canvas.component';
   declarations: [
     AppComponent,
     WorkspaceComponent,
-    GraphCanvasComponent
+    GraphCanvasComponent,
   ],
   imports: [
     BrowserModule,
