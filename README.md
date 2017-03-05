@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/craft-ng/editor.svg?branch=master)](https://travis-ci.org/craft-ng/editor)
+[![Coverage Status](https://coveralls.io/repos/github/craft-ng/editor/badge.svg?branch=master)](https://coveralls.io/github/craft-ng/editor?branch=master)
 
 # Craft-Ng Editor
 
