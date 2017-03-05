@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class EditorNgPage {
+export class EditorPage {
   navigateTo() {
     return browser.get('/');
   }

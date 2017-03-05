@@ -1,10 +1,10 @@
-import { EditorNgPage } from './app.po';
+import { EditorPage } from './app.po';
 
-describe('editor-ng App', function() {
-  let page: EditorNgPage;
+describe('Craft-Ng Editor App', () => {
+  let page: EditorPage;
 
   beforeEach(() => {
-    page = new EditorNgPage();
+    page = new EditorPage();
   });
 
   it('should display message saying app works', () => {

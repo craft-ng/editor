@@ -10,4 +10,4 @@ export const routes: Routes = [
 
 export const navigatableComponents = [
     WorkspaceComponent
-]
+];
