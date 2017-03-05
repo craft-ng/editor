@@ -22,7 +22,7 @@ before_script:
 script:
   - ng test --single-run --code-coverage
   #- ng build --prod --aot=false
-after_success:
+after_script:
   # https://www.gregjs.com/javascript/2016/how-to-get-a-shiny-coverage-badge-for-your-github-project/
   - cat ./coverage/lcov.info | node node_modules/.bin/coveralls 
 notifications:
