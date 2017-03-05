@@ -6,8 +6,9 @@ export class Rectangle implements Shape {
      *Constructs a new rectangle with the specified position anddimensions
      */
     constructor(public x: number, public y: number, public width: number, public height: number) {
-
-
+        if (width <= 0 || height <= 0) {
+            throw new Error('Both dimensions of a rectangle must be positive numbers');
+        }
     }
 
     public getPerimeter(): number {
@@ -15,7 +16,7 @@ export class Rectangle implements Shape {
     }
 
     public getArea(): number {
-        throw 'Not Implemented';
+        return this.width * this.height;
     }
 
     public getBoundingShape<T extends Shape>(shapeClass: any | Class<T>): T {
