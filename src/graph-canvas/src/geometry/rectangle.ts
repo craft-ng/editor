@@ -21,9 +21,10 @@ export class Rectangle implements Shape {
 
     public getBoundingShape<T extends Shape>(shapeClass: any | Class<T>): T {
         if (shapeClass === Rectangle) {
-            console.log('rect');
+            return <any>new Rectangle(this.x, this.y, this.width, this.height);
         }
-
-        throw new Error('Specified bounding shape is not supported for this shape');
+        else {
+            throw new Error('Specified bounding shape is not supported for this shape');
+        }
     }
 }

@@ -2,6 +2,12 @@ import { Rectangle } from './../../src/geometry/rectangle';
 
 describe('Rectangle', () => {
 
+    let variousCorrectRectangleCases = [
+        { x: 10, y: 11, w: 12, h: 13, perimeter: 50, area: 156 },
+        { x: -8, y: 16, w: 12, h: 13, perimeter: 50, area: 156 },
+        { x: -8, y: 16, w: 10, h: 10, perimeter: 40, area: 100 }
+    ];
+
     describe('constructor', () => {
         let rectangle: Rectangle;
 
@@ -30,23 +36,40 @@ describe('Rectangle', () => {
         });
 
         all('should throw when width is non-positive', [0, -0.1, -1, -100], (width) => {
-            expect(() => new Rectangle(10, 20, width, 100)).toThrow();
+            expect(() => new Rectangle(10, 20, width, 100)).toThrowError();
         });
 
         all('should throw when height is non-positive', [0, -0.1, -1, -100], (height) => {
-            expect(() => new Rectangle(10, 20, 100, height)).toThrow();
+            expect(() => new Rectangle(10, 20, 100, height)).toThrowError();
         });
     });
 
     describe('getPerimiter', () => {
 
-        all('should calculate perimeter', [
-            { x: 10, y: 11, w: 12, h: 13, perimeter: 2 * 12 + 2 * 13 },
-            { x: -8, y: 16, w: 12, h: 13, perimeter: 2 * 12 + 2 * 13 },
-            { x: -8, y: 16, w: 10, h: 10, perimeter: 40 }
-        ], (rectData) => {
+        all('should calculate perimeter', variousCorrectRectangleCases, (rectData) => {
             const rectangle = new Rectangle(rectData.x, rectData.y, rectData.w, rectData.h);
             expect(rectangle.getPerimeter()).toBe(rectData.perimeter);
         });
     });
+
+    describe('getArea', () => {
+        all('should calculate area', variousCorrectRectangleCases, (rectData) => {
+            const rectangle = new Rectangle(rectData.x, rectData.y, rectData.w, rectData.h);
+            expect(rectangle.getArea()).toBe(rectData.area);
+        });
+    });
+
+    describe('getBoundingShape', () => {
+        all('should calculate bounding Rectangle', variousCorrectRectangleCases, (rectData) => {
+            const rectangle = new Rectangle(rectData.x, rectData.y, rectData.w, rectData.h);
+            expect(rectangle.getBoundingShape(Rectangle)).toEqual(
+                new Rectangle(rectData.x, rectData.y, rectData.w, rectData.h));
+        });
+
+        it('should throw when unsupported shape class is specified', () => {
+            const rectangle = new Rectangle(0, 0, 10, 10);
+            expect(() => rectangle.getBoundingShape(Object)).toThrowError();
+        });
+    });
+
 });
