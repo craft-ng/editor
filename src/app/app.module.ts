@@ -7,7 +7,7 @@ import { routes } from './app.routing';
 
 import { AppComponent } from './app.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
-import { GraphCanvasComponent } from './graph-canvas/graph-canvas.component';
+import { GraphCanvasComponent } from './graphs/graph-canvas/graph-canvas.component';
 
 @NgModule({
   declarations: [

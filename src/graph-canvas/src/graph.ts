@@ -1,3 +1,4 @@
+import { Node } from './node';
 
 /**
  * Graph that consists of multiple nodes and relations between them

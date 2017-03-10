@@ -1,4 +1,4 @@
-import { GraphCanvasComponent } from './graph-canvas/graph-canvas.component';
+import { GraphCanvasComponent } from './graphs/graph-canvas/graph-canvas.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { Routes } from '@angular/router';
 
