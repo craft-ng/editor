@@ -4,7 +4,8 @@ export interface Transform {
 
 export class Translation implements Transform {
     public getCssTransform(): string {
-        throw new Error('Not implemented yet.');
+        return 'translate(30,30)';
+        //throw new Error('Not implemented yet.');
     }
 }
 
@@ -13,5 +14,11 @@ export class MultiTransform implements Transform {
 
     public getCssTransform(): string {
         throw new Error('Not implemented yet.');
+    }
+}
+
+export class IdentityTransform implements Transform {
+    getCssTransform(): string {
+        return '';
     }
 }

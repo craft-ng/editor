@@ -4,6 +4,8 @@ import { GraphService } from './../shared/graph.service';
 import { element } from 'protractor';
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { D3Service, D3, Selection } from 'd3-ng2-service';
+import { GraphComponent } from '../../../graph-canvas/src/presentation/graph-component';
+import { NodeComponent } from '../../../graph-canvas/src/presentation/node-component';
 
 @Component({
   selector: 'app-graph-canvas',
@@ -31,6 +33,10 @@ export class GraphCanvasComponent implements OnInit {
       let graph: Graph = this.graphService.loadGraph();
       let presenter = new GraphPresenter(graph);
 
+      presenter.components = [
+        new GraphComponent()
+          .component(new NodeComponent())
+      ];
       presenter.initialize(d3ParentElement);
     }
   }

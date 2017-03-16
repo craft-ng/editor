@@ -2,19 +2,22 @@ import { Graph } from './../graph';
 import { Node } from './../node';
 import { Viewport } from './viewport';
 import { D3Service, D3, Selection } from 'd3-ng2-service';
+import { ViewComponent, D3Selection } from './view-component';
 
 export class GraphPresenter {
+
+    public components: ViewComponent[] = [];
 
     /**
      *
      */
-    constructor(private graph: Graph) {
+    constructor(public graph: Graph) {
 
 
     }
 
-    presentableNodes(): Iterable<Node> {
-        throw new Error('not implemented');
+    presentableNodes(): Node[] {
+        return this.graph.nodes;
     }
 
     get viewport(): Viewport {
@@ -29,13 +32,12 @@ export class GraphPresenter {
 
     }
 
-    initialize(d3ParentElement: Selection<any, any, any, any>) {
+    initialize(d3ParentElement: D3Selection) {
 
-        const svg = d3ParentElement
-            .append('svg')
-            .classed('graph-canvas-surface', true)
-            .attr('viewBox', '0 0 600 400');
-
-            
+        for (let component of this.components) {
+            component.initialize({ graphPresenter: this, parent: d3ParentElement });
+        }
     }
+
+
 }

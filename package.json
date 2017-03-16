@@ -22,6 +22,7 @@
     "@angular/router": "^3.4.0",
     "core-js": "^2.4.1",
     "d3-ng2-service": "^1.5.2",
+    "lodash": "^4.17.4",
     "rxjs": "^5.1.0",
     "zone.js": "^0.7.6"
   },
@@ -30,6 +31,7 @@
     "@angular/compiler-cli": "^2.4.0",
     "@types/jasmine": "2.5.38",
     "@types/jasmine-data_driven_tests": "^1.0.1",
+    "@types/lodash": "^4.14.55",
     "@types/node": "~6.0.60",
     "codelyzer": "~2.0.0",
     "coveralls": "^2.11.16",
