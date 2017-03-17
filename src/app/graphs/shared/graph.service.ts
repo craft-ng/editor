@@ -1,3 +1,4 @@
+import { Circle } from './../../../graph-canvas/src/geometry/circle';
 import { Geometry } from './../../../graph-canvas/src/geometry/geometry';
 import { Rectangle } from '../../../graph-canvas/src/geometry/rectangle';
 import { Node } from './../../../graph-canvas/src/node';
@@ -11,16 +12,30 @@ export class GraphService {
 
   loadGraph(): Graph {
 
-    let node = new Node();
-    node.geometry = {
-      shape: new Rectangle(10, 10, 40, 20)
-    };
+
 
     let graph = new Graph();
     graph.nodes = [
-      node
+      this.createRectangle(10, 10, 40, 20),
+      this.createCircle(20, 50, 10)
     ];
 
     return graph;
+  }
+
+  private createRectangle(x: number, y: number, w: number, h: number): Node {
+    let node = new Node();
+    node.geometry = {
+      shape: new Rectangle(x, y, w, h)
+    };
+    return node;
+  }
+
+  private createCircle(r: number, x: number, y: number) {
+    let node = new Node();
+    node.geometry = {
+      shape: new Circle(r, x, y)
+    };
+    return node;
   }
 }

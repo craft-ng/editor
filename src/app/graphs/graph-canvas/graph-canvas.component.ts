@@ -1,3 +1,4 @@
+import { CirclePresenter } from './../../../graph-canvas/src/presentation/circle-presenter';
 import { RectanglePresenter } from './../../../graph-canvas/src/presentation/rectangle-presenter';
 import { GraphPresenter } from './../../../graph-canvas/src/presentation/graph-presenter';
 import { Graph } from './../../../graph-canvas/src/graph';
@@ -36,7 +37,9 @@ export class GraphCanvasComponent implements OnInit {
 
       presenter.components = [
         new GraphComponent()
-          .component(new NodeComponent().addPresenter(new RectanglePresenter())
+          .component(new NodeComponent()
+            .addPresenter(new RectanglePresenter())
+            .addPresenter(new CirclePresenter())
           )
       ];
       presenter.initialize(d3ParentElement);
