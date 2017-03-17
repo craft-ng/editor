@@ -1,3 +1,4 @@
+import { RectanglePresenter } from './../../../graph-canvas/src/presentation/rectangle-presenter';
 import { GraphPresenter } from './../../../graph-canvas/src/presentation/graph-presenter';
 import { Graph } from './../../../graph-canvas/src/graph';
 import { GraphService } from './../shared/graph.service';
@@ -35,7 +36,8 @@ export class GraphCanvasComponent implements OnInit {
 
       presenter.components = [
         new GraphComponent()
-          .component(new NodeComponent())
+          .component(new NodeComponent().addPresenter(new RectanglePresenter())
+          )
       ];
       presenter.initialize(d3ParentElement);
     }

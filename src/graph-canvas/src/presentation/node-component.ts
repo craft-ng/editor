@@ -1,32 +1,46 @@
+import { NodePresenter } from './node-presenter';
+import { Rectangle } from './../geometry/rectangle';
+import { Node } from './../node';
 import { ViewComponent, ViewComponentContext } from './view-component';
 import { Transform } from '../geometry/transform';
-import { groupBy } from 'lodash';
+import * as _ from 'lodash';
 
 export class NodeComponent implements ViewComponent {
     components: ViewComponent[];
 
+    public nodePresenters: NodePresenter[] = [];
+
     initialize(context: ViewComponentContext) {
-        let presentableNodes = context.graphPresenter.presentableNodes().map(node => ({
-            node: node,
-            //edgeRight: node.radiusX
-        }));
+        let visibleNodes: Node[] = context.graphPresenter.presentableNodes();
 
-        let identityTransform: Transform = {
-            getCssTransform: () => ''
-        };
+        let groupedVisibleNodes = _.groupBy(visibleNodes, node => node.geometry.shape.getType());
 
-        context.parent
-            .selectAll('ellipse')
-            .data(presentableNodes)
-            .enter()
-            .append('g')
-            .attr('transform', data => (data.node.geometry.transform == undefined ? identityTransform : data.node.geometry.transform).getCssTransform());
-        // .attr('transform', data => `translate(${data.node.centerX},${data.node.centerY})`);
+        for (let key of Object.keys(groupedVisibleNodes)) {
+            let nodePresenter = this.getPresenter(key);
+            if (nodePresenter === undefined) {
+                console.log(
+                    `No node presenter for geometry type '${key}' was found. 
+                    Check that the required presenter is register in the graph presenter.`
+                );
+            } else {
+                let dataSet = groupedVisibleNodes[key];
 
+                nodePresenter.rebuildView(context, dataSet);
+            }
+        }
     }
+
     rebuildView(context: ViewComponentContext) {
         throw new Error('Method not implemented.');
     }
 
+    addPresenter(presenter: NodePresenter): this {
+        this.nodePresenters.push(presenter);
+        return this;
+    }
 
+    getPresenter(geometryType: string) {
+        return this.nodePresenters
+            .find(node => node.getType() === geometryType);
+    }
 }

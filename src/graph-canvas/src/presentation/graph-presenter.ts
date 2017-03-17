@@ -1,3 +1,4 @@
+import { NodePresenter } from './node-presenter';
 import { Graph } from './../graph';
 import { Node } from './../node';
 import { Viewport } from './viewport';
@@ -7,7 +8,7 @@ import { ViewComponent, D3Selection } from './view-component';
 export class GraphPresenter {
 
     public components: ViewComponent[] = [];
-
+    
     /**
      *
      */
@@ -38,6 +39,4 @@ export class GraphPresenter {
             component.initialize({ graphPresenter: this, parent: d3ParentElement });
         }
     }
-
-
 }

@@ -27,4 +27,11 @@ export class Rectangle implements Shape {
             throw new Error('Specified bounding shape is not supported for this shape');
         }
     }
+
+    /**
+     * getType
+     */
+    public getType(): string {
+        return 'rectangle';
+    }
 }
