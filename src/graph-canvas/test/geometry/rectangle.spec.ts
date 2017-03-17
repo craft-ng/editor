@@ -3,6 +3,9 @@ import { Rectangle } from './../../src/geometry/rectangle';
 describe('Rectangle', () => {
 
     let variousCorrectRectangleCases = [
+        { x: 10, y: 11, w: 0, h: 0, perimeter: 0, area: 0 },
+        { x: 10, y: 11, w: 0, h: 13, perimeter: 26, area: 0 },
+        { x: 10, y: 11, w: 12, h: 0, perimeter: 24, area: 0 },
         { x: 10, y: 11, w: 12, h: 13, perimeter: 50, area: 156 },
         { x: -8, y: 16, w: 12, h: 13, perimeter: 50, area: 156 },
         { x: -8, y: 16, w: 10, h: 10, perimeter: 40, area: 100 }
@@ -12,7 +15,7 @@ describe('Rectangle', () => {
         let rectangle: Rectangle;
 
         beforeEach(() => {
-            rectangle = new Rectangle(10, 11, 12, 13)
+            rectangle = new Rectangle(10, 11, 12, 13);
         });
 
         it('should create', () => {
@@ -35,11 +38,11 @@ describe('Rectangle', () => {
             expect(rectangle.height).toBe(13);
         });
 
-        all('should throw when width is non-positive', [0, -0.1, -1, -100], (width) => {
+        all('should throw when width is negative', [-0.1, -1, -100], (width) => {
             expect(() => new Rectangle(10, 20, width, 100)).toThrowError();
         });
 
-        all('should throw when height is non-positive', [0, -0.1, -1, -100], (height) => {
+        all('should throw when height is negative', [-0.1, -1, -100], (height) => {
             expect(() => new Rectangle(10, 20, 100, height)).toThrowError();
         });
     });
@@ -72,4 +75,9 @@ describe('Rectangle', () => {
         });
     });
 
+    describe('getType', () => {
+        it('returns rectangle', () => {
+            expect(new Rectangle(0, 0, 1, 1).getType()).toBe('rectangle');
+        });
+    });
 });

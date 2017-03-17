@@ -6,8 +6,8 @@ export class Rectangle implements Shape {
      *Constructs a new rectangle with the specified position anddimensions
      */
     constructor(public x: number, public y: number, public width: number, public height: number) {
-        if (width <= 0 || height <= 0) {
-            throw new Error('Both dimensions of a rectangle must be positive numbers');
+        if (width < 0 || height < 0) {
+            throw new Error('Both dimensions of a rectangle must not be negative numbers');
         }
     }
 
@@ -24,7 +24,7 @@ export class Rectangle implements Shape {
             return <any>new Rectangle(this.x, this.y, this.width, this.height);
         }
         else {
-            throw new Error('Specified bounding shape is not supported for this shape');
+            throw new Error('Specified bounding shape is not supported');
         }
     }
 
