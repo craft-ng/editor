@@ -16,11 +16,11 @@ export class CirclePresenter implements NodePresenter {
         };
 
         context.parent
-            .selectAll('g.circle')
+            .selectAll('g.gc-node.gc-circle')
             .data(nodes)
             .enter()
             .append('g')
-            .classed('circle', true)
+            .attr('class', 'gc-node gc-circle')
             .attr('transform', (node: Node) => (
                 node.geometry.transform == undefined ?
                     identityTransform :

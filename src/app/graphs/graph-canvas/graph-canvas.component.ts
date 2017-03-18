@@ -1,3 +1,4 @@
+import { PickSelectionComponent } from './../../../graph-canvas/src/selection/pick-selection-component';
 import { RectangularSelectionComponent } from './../../../graph-canvas/src/selection/rectangular-selection-component';
 import { CirclePresenter } from './../../../graph-canvas/src/components/circle-presenter';
 import { RectanglePresenter } from './../../../graph-canvas/src/components/rectangle-presenter';
@@ -42,9 +43,10 @@ export class GraphCanvasComponent implements OnInit {
             .addPresenter(new RectanglePresenter())
             .addPresenter(new CirclePresenter())
           )
-          .component(new RectangularSelectionComponent())
+          //.component(new RectangularSelectionComponent())
+          .component(new PickSelectionComponent())
       ];
-      presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter });
+      presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter, shared: {} });
     }
   }
 

@@ -16,11 +16,11 @@ export class RectanglePresenter implements NodePresenter {
         };
 
         let nodeGroup = context.parent
-            .selectAll('g.rect')
+            .selectAll('g.gc-node.gc-rect')
             .data(nodes)
             .enter()
             .append('g')
-            .classed('rect', true)
+            .attr('class', 'gc-node gc-rect')
             .attr('transform', (node: Node) => (
                 node.geometry.transform == undefined ?
                     identityTransform :

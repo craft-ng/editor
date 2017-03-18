@@ -7,14 +7,16 @@ export function switchTo(originalContext: ViewComponentContext, newParent: D3Sel
     return {
         d3: originalContext.d3,
         graphPresenter: originalContext.graphPresenter,
-        parent: newParent
+        parent: newParent,
+        shared: originalContext.shared
     };
 }
 
 export interface ViewComponentContext {
     d3: D3;
     graphPresenter: GraphPresenter,
-    parent: D3Selection
+    parent: D3Selection,
+    shared: {}
 }
 
 export interface ViewComponent {
