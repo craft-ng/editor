@@ -20,7 +20,7 @@ export class NodeComponent implements ViewComponent {
             if (nodePresenter === undefined) {
                 console.log(
                     `No node presenter for geometry type '${key}' was found. 
-                    Check that the required presenter is register in the graph presenter.`
+                    Check that the required presenter is registered in the graph presenter.`
                 );
             } else {
                 let dataSet = groupedVisibleNodes[key];

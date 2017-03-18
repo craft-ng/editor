@@ -4,11 +4,12 @@ export class GraphComponent extends ViewComponentBase {
     components: ViewComponent[];
 
     initialize(context: ViewComponentContext) {
+        let viewBox = context.graphPresenter.viewport;
 
         const svg = context.parent
             .append('svg')
             .classed('graph-canvas-surface', true)
-            .attr('viewBox', '0 0 600 400');
+            .attr('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`);
 
         this.initializeSubComponents(switchTo(context, svg));
     }

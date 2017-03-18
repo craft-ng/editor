@@ -1,13 +1,14 @@
-import { CirclePresenter } from './../../../graph-canvas/src/presentation/circle-presenter';
-import { RectanglePresenter } from './../../../graph-canvas/src/presentation/rectangle-presenter';
-import { GraphPresenter } from './../../../graph-canvas/src/presentation/graph-presenter';
+import { RectangularSelectionComponent } from './../../../graph-canvas/src/selection/rectangular-selection-component';
+import { CirclePresenter } from './../../../graph-canvas/src/components/circle-presenter';
+import { RectanglePresenter } from './../../../graph-canvas/src/components/rectangle-presenter';
+import { GraphPresenter } from './../../../graph-canvas/src/components/graph-presenter';
 import { Graph } from './../../../graph-canvas/src/graph';
 import { GraphService } from './../shared/graph.service';
 import { element } from 'protractor';
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { D3Service, D3, Selection } from 'd3-ng2-service';
-import { GraphComponent } from '../../../graph-canvas/src/presentation/graph-component';
-import { NodeComponent } from '../../../graph-canvas/src/presentation/node-component';
+import { GraphComponent } from '../../../graph-canvas/src/components/graph-component';
+import { NodeComponent } from '../../../graph-canvas/src/components/node-component';
 
 @Component({
   selector: 'app-graph-canvas',
@@ -41,8 +42,9 @@ export class GraphCanvasComponent implements OnInit {
             .addPresenter(new RectanglePresenter())
             .addPresenter(new CirclePresenter())
           )
+          .component(new RectangularSelectionComponent())
       ];
-      presenter.initialize(d3ParentElement);
+      presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter });
     }
   }
 

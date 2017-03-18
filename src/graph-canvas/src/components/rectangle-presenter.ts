@@ -15,16 +15,19 @@ export class RectanglePresenter implements NodePresenter {
             getCssTransform: () => ''
         };
 
-        context.parent
-            .selectAll('rect')
+        let nodeGroup = context.parent
+            .selectAll('g.rect')
             .data(nodes)
             .enter()
             .append('g')
+            .classed('rect', true)
             .attr('transform', (node: Node) => (
                 node.geometry.transform == undefined ?
                     identityTransform :
                     node.geometry.transform
-            ).getCssTransform())
+            ).getCssTransform());
+
+        nodeGroup
             .append('rect')
             .attr('x', node => (<Rectangle>node.geometry.shape).x)
             .attr('y', node => (<Rectangle>node.geometry.shape).y)
