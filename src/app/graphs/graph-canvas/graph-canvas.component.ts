@@ -46,7 +46,7 @@ export class GraphCanvasComponent implements OnInit {
           //.component(new RectangularSelectionComponent())
           .component(new PickSelectionComponent())
       ];
-      presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter, shared: {} });
+      presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter, state: {} });
     }
   }
 

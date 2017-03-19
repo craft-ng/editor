@@ -4,9 +4,9 @@ import * as _ from 'lodash';
 const selectionId = 'selection';
 
 export function getSelection(context: ViewComponentContext): Selection<any> {
-    let selection: Selection<any> = context.shared[selectionId];
+    let selection: Selection<any> = context.state[selectionId];
     if (selection == null) {
-        context.shared[selectionId] = selection = new Selection<any>();
+        context.state[selectionId] = selection = new Selection<any>();
     }
 
     return selection;

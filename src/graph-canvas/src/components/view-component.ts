@@ -1,5 +1,8 @@
 import { GraphPresenter } from './graph-presenter';
 import { Selection, D3 } from 'd3-ng2-service';
+// import { mediator } from 'mediator-js';
+// import * as Mediator from 'mediator-js';
+var Mediator = require('mediator-js');
 
 export type D3Selection = Selection<any, any, any, any>;
 
@@ -8,7 +11,7 @@ export function switchTo(originalContext: ViewComponentContext, newParent: D3Sel
         d3: originalContext.d3,
         graphPresenter: originalContext.graphPresenter,
         parent: newParent,
-        shared: originalContext.shared
+        state: originalContext.state
     };
 }
 
@@ -16,7 +19,7 @@ export interface ViewComponentContext {
     d3: D3;
     graphPresenter: GraphPresenter,
     parent: D3Selection,
-    shared: {}
+    state: {}
 }
 
 export interface ViewComponent {
