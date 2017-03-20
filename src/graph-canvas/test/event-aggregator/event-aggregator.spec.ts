@@ -21,6 +21,7 @@ describe('EventAggregator', () => {
     let incrementingCallback = () => callCount++;;
 
     let illegalEventNames = [undefined, null, ''];
+    let illegalCallbacks = [undefined, null, 10, 'text', { type: 'object' }];
 
     describe('subscribe', () => {
 
@@ -31,11 +32,10 @@ describe('EventAggregator', () => {
                 .toThrowError('Event name must be specified');
         });
 
-        all('throws when a non-function callback is specified',
-            [undefined, null, 10, 'text', { type: 'object' }], (callback: any) => {
-                expect(() => eventAggregator.subscribe('event', callback))
-                    .toThrowError('Only functions can be used as callbacks');
-            });
+        all('throws when a non-function callback is specified', illegalCallbacks, (callback: any) => {
+            expect(() => eventAggregator.subscribe('event', callback))
+                .toThrowError('Only functions can be used as callbacks');
+        });
     });
 
     describe('unsubscribe', () => {
@@ -45,6 +45,11 @@ describe('EventAggregator', () => {
         all('throws when event name is not specified', illegalEventNames, (event) => {
             expect(() => eventAggregator.unsubscribe(event, emptyCallback))
                 .toThrowError('Event name must be specified');
+        });
+
+        all('throws when a non-function callback is specified', illegalCallbacks, (callback: any) => {
+            expect(() => eventAggregator.unsubscribe('event', callback))
+                .toThrowError('Only functions can be used as callbacks');
         });
 
         it('does not remove subscriptions from events other than specified', () => {
