@@ -94,7 +94,8 @@ describe('EventAggregator', () => {
         beforeEachInitializeInstance();
 
         all('throws when event name is not specified', illegalEventNames, (event) => {
-            expect(eventAggregator.publish(event)).toThrowError('Event name must be specified');
+            expect(() => eventAggregator.publish(event))
+                .toThrowError('Event name must be specified');
         });
 
         it('calls all subscriptions to the specified event', () => {

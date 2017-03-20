@@ -1,9 +1,5 @@
 import { GraphPresenter } from './graph-presenter';
 import { Selection, D3 } from 'd3-ng2-service';
-// import { mediator } from 'mediator-js';
-// import * as Mediator from 'mediator-js';
-var Mediator = require('mediator-js');
-
 export type D3Selection = Selection<any, any, any, any>;
 
 export function switchTo(originalContext: ViewComponentContext, newParent: D3Selection): ViewComponentContext {

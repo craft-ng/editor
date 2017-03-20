@@ -1,3 +1,4 @@
+import { routes } from './../../../app/app.routing';
 export type Callback = (data?: EventData) => void;
 export type EventData = any;
 
@@ -7,13 +8,13 @@ export class EventAggregator {
 
     private throwIfEventIllegal(event: string): void {
         if (!event) {
-            throw new Error("Event name must be specified");
+            throw new Error('Event name must be specified');
         }
     }
 
     private throwIfCallbackNotAFunction(callback: Callback) {
         if (typeof callback !== 'function') {
-            throw new Error("Only functions can be used as callbacks");
+            throw new Error('Only functions can be used as callbacks');
         }
     }
 
@@ -25,9 +26,8 @@ export class EventAggregator {
         if (subs == null) {
             subs = [];
             this._subscriptions[event] = subs;
-        } else {
-            subs.push(callback);
         }
+        subs.push(callback);
     }
 
     publish(event: string, data?: EventData) {
@@ -35,7 +35,16 @@ export class EventAggregator {
 
         let subs = this._subscriptions[event];
         if (subs) {
-            subs.forEach(sub => sub(data));
+            subs.forEach(sub => {
+                try {
+                    sub(data);
+                }
+                catch (exception) {
+                    console.error(
+                        `Subscriber to event <${event}> threw: \r\n\t ${exception}.\r\nFailing subscriber's body:\r\n\t${sub.toString()}`
+                    );
+                }
+            });
         }
     }
 
