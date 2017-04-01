@@ -1,5 +1,4 @@
 import { ViewComponentContext } from './../components/view-component';
-import * as _ from 'lodash';
 
 export function getSelection(selectionId: string, context: ViewComponentContext): Selection<any> {
     let selection: Selection<any> = context.state[selectionId];
@@ -11,7 +10,7 @@ export function getSelection(selectionId: string, context: ViewComponentContext)
 }
 
 export class Selection<T> {
-    private _items: T[] = [];
+    private _items: Set<T> = new Set();
 
     constructor(items?: T[]) {
         if (items) {
@@ -20,7 +19,7 @@ export class Selection<T> {
     }
 
     get items(): T[] {
-        return this._items;
+        return Array.from(this._items);
     }
 
     set items(items: T[]) {
@@ -31,33 +30,32 @@ export class Selection<T> {
     }
 
     isSelected(item: T): boolean {
-        return _.includes(this.items, item);
+        return this._items.has(item);
     }
 
     allSelected(...items: T[]): boolean {
-        let areAllItemsSelected: boolean;
+        let areAllItemsSelected = true;
         if (items.length === 0) {
             // neither selector nor deselected
             areAllItemsSelected = undefined;
         }
         else {
-            areAllItemsSelected = _.difference(items, this.items).length === 0;
+            items.forEach(item => areAllItemsSelected = areAllItemsSelected && this._items.has(item));
         }
 
         return areAllItemsSelected;
     }
 
     clear() {
-        this._items = [];
+        this._items.clear();
     }
 
     add(...items: T[]) {
-        let newItems = _.difference(items, this.items);
-        return this.items.push(...newItems);
+        items.forEach(item => this._items.add(item));
     }
 
     remove(...items: T[]) {
-        this.items = _.difference(this.items, items);
+        items.forEach(item => this._items.delete(item));
     }
 
     toggle(...items: T[]) {
