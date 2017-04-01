@@ -1,9 +1,7 @@
 import { ViewComponentContext } from './../components/view-component';
 import * as _ from 'lodash';
 
-const selectionId = 'selection';
-
-export function getSelection(context: ViewComponentContext): Selection<any> {
+export function getSelection(selectionId: string, context: ViewComponentContext): Selection<any> {
     let selection: Selection<any> = context.state[selectionId];
     if (selection == null) {
         context.state[selectionId] = selection = new Selection<any>();
@@ -16,7 +14,9 @@ export class Selection<T> {
     private _items: T[] = [];
 
     constructor(items?: T[]) {
-        this.add(...items);
+        if (items) {
+            this.add(...items);
+        }
     }
 
     get items(): T[] {
@@ -35,7 +35,16 @@ export class Selection<T> {
     }
 
     allSelected(...items: T[]): boolean {
-        return _.difference(items, this.items).length === 0;
+        let areAllItemsSelected: boolean;
+        if (items.length === 0) {
+            // neither selector nor deselected
+            areAllItemsSelected = undefined;
+        }
+        else {
+            areAllItemsSelected = _.difference(items, this.items).length === 0;
+        }
+
+        return areAllItemsSelected;
     }
 
     clear() {

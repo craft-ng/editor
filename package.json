@@ -35,6 +35,7 @@
     "@types/node": "~6.0.60",
     "codelyzer": "~2.0.0",
     "coveralls": "^2.11.16",
+    "jasmine-collection-matchers": "^0.2.0",
     "jasmine-core": "~2.5.2",
     "jasmine-data_driven_tests": "^1.0.0",
     "jasmine-spec-reporter": "~3.2.0",

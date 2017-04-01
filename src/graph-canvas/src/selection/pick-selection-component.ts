@@ -1,3 +1,4 @@
+import { graphSelection } from './../states';
 import { Node } from './../node';
 import { ViewComponentContext } from './../components/view-component';
 import { ViewComponentBase } from '../components/view-component';
@@ -20,7 +21,7 @@ export class PickSelectionComponent extends ViewComponentBase {
     }
 
     toggleSelection(data: Node, element, context: ViewComponentContext) {
-        let selection = getSelection(context);
+        let selection = getSelection(graphSelection, context);
 
         let isSelected = selection.isSelected(data);
 
