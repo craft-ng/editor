@@ -9,8 +9,25 @@ export function getSelection(selectionId: string, context: ViewComponentContext)
     return selection;
 }
 
+export interface SelectionEventData<T> {
+    selectionId: string;
+    selection: Selection<T>;
+    items: T[];
+}
+
+export type SelectionEvent = 'added' | 'removed';
+
+type Callback<T> = (data: SelectionEventData<T>) => void;
+
+interface CallbackInfo<T> {
+    event: string;
+    method: CallbackInfo<T>;
+}
+
 export class Selection<T> {
     private _items: Set<T> = new Set();
+
+    public callbacks: CallbackInfo<T>[];
 
     constructor(items?: T[]) {
         if (items) {
@@ -38,8 +55,7 @@ export class Selection<T> {
         if (items.length === 0) {
             // neither selector nor deselected
             areAllItemsSelected = undefined;
-        }
-        else {
+        } else {
             items.forEach(item => areAllItemsSelected = areAllItemsSelected && this._items.has(item));
         }
 
@@ -67,5 +83,13 @@ export class Selection<T> {
                 this.add(item);
             }
         }
+    }
+
+    on(event: SelectionEvent, callback: Callback<T>) {
+
+    }
+
+    off(event: SelectionEvent, callback: Callback<T>) {
+
     }
 }

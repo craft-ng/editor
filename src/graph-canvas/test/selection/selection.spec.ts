@@ -1,5 +1,11 @@
 import { ViewComponentContext } from './../../src/components/view-component';
-import { Selection, getSelection } from './../../src/selection/selection';
+import { Selection, getSelection, SelectionEventData } from './../../src/selection/selection';
+
+let createSelectionForCallbackTests = () => {
+    let selection = new Selection();
+    spyOn(selection, 'on');
+    return selection;
+};
 
 describe('getSelection', () => {
     let context: ViewComponentContext;
@@ -67,6 +73,14 @@ describe('Selection', () => {
             expect(selection.items).toEqual(item.expectedGet);
         });
 
+        it('calls change callback when changed', () => {
+            let selection = createSelectionForCallbackTests();
+            expect(selection.changed).toHaveBeenCalled()
+        });
+
+        it('does not call change callback when not changed', () => {
+            throw new Error('not implemented');
+        });
     });
 
     describe('isSelected', () => {
@@ -127,6 +141,14 @@ describe('Selection', () => {
             selection.clear();
             expect(selection.items).toEqual([]);
         });
+
+        it('calls change callback when changed', () => {
+            throw new Error('not implemented');
+        });
+
+        it('does not call change callback when not changed', () => {
+            throw new Error('not implemented');
+        });
     });
 
     describe('add', () => {
@@ -134,6 +156,14 @@ describe('Selection', () => {
             let selection = new Selection([1, 2]);
             selection.add(1, 3, 4);
             expect(selection.items).toEqual([1, 2, 3, 4]);
+        });
+
+        it('calls change callback when changed', () => {
+            throw new Error('not implemented');
+        });
+
+        it('does not call change callback when not changed', () => {
+            throw new Error('not implemented');
         });
     });
 
@@ -154,6 +184,50 @@ describe('Selection', () => {
             let selection = new Selection([]);
             selection.toggle();
             expect(selection.items).toEqual([]);
+        });
+
+        it('calls change callback when changed', () => {
+            throw new Error('not implemented');
+        });
+
+        it('does not call change callback when not changed', () => {
+            throw new Error('not implemented');
+        });
+    });
+
+    describe('raise', () => {
+        it('calls all appropriate callbacks', () => {
+            let selection = new Selection();
+            let callbackObject = {
+                callback: (data: SelectionEventData<any>) => { }
+            };
+            spyOn(callbackObject, 'callback');
+            selection.on('added', callbackObject.callback);
+
+            let data: SelectionEventData<any> = {
+                selectionId: 'selection',
+                selection: selection,
+                items: [1, 2]
+            };
+            selection.raise('added', data);
+            selection.raise('removed', data);
+
+            expect(callbackObject.callback).toHaveBeenCalledTimes(1);
+            expect(callbackObject.callback).toHaveBeenCalledWith('added', data);
+        });
+
+        it('does not fail if no change callbacks are specified', () => {
+            throw new Error('not implemented');
+        });
+    });
+
+    describe('off', () => {
+        it('removes the specified callback', () => {
+            throw new Error('not implemented');
+        });
+
+        it('does not fail if the specified callback was not registered', () => {
+            throw new Error('not implemented');
         });
     });
 });
