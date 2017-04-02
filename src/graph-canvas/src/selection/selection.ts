@@ -1,4 +1,5 @@
 import { ViewComponentContext } from './../components/view-component';
+import { EventAggregator } from '../event-aggregator/event-aggregator';
 
 export function getSelection(selectionId: string, context: ViewComponentContext): Selection<any> {
     let selection: Selection<any> = context.state[selectionId];
@@ -10,7 +11,6 @@ export function getSelection(selectionId: string, context: ViewComponentContext)
 }
 
 export interface SelectionEventData<T> {
-    selectionId: string;
     selection: Selection<T>;
     items: T[];
 }
@@ -21,13 +21,13 @@ type Callback<T> = (data: SelectionEventData<T>) => void;
 
 interface CallbackInfo<T> {
     event: string;
-    method: CallbackInfo<T>;
+    method: Callback<T>;
 }
 
 export class Selection<T> {
     private _items: Set<T> = new Set();
 
-    public callbacks: CallbackInfo<T>[];
+    private _events: EventAggregator = new EventAggregator();
 
     constructor(items?: T[]) {
         if (items) {
@@ -63,33 +63,96 @@ export class Selection<T> {
     }
 
     clear() {
-        this._items.clear();
+        let removedItems = this.items;
+        this._clear();
+        this._raiseRemoved(removedItems);
     }
 
     add(...items: T[]) {
-        items.forEach(item => this._items.add(item));
+        let addedItems = this._calculateAddedItems(items);
+        this._add(items);
+        this._raiseAdded(addedItems);
     }
 
     remove(...items: T[]) {
+        let removedItems = this._calculateRemovedItems(items);
+        this._remove(items);
+        this._raiseRemoved(removedItems);
+    }
+
+    private _add(items: T[]) {
+        items.forEach(item => this._items.add(item));
+    }
+
+    private _remove(items: T[]) {
         items.forEach(item => this._items.delete(item));
     }
 
-    toggle(...items: T[]) {
+    private _clear() {
+        this._items.clear();
+    }
+
+    private _toggle(items: T[]) {
+        let modifiedItems = {
+            removed: [],
+            added: []
+        }
         for (let index = 0; index < items.length; index++) {
             let item = items[index];
             if (this.isSelected(item)) {
-                this.remove(item);
+                modifiedItems.removed.push(item);
+                this._remove([item]);
             } else {
-                this.add(item);
+                modifiedItems.added.push(item);
+                this._add([item]);
             }
         }
+        return modifiedItems;
+    }
+
+    toggle(...items: T[]) {
+        let modifiedItems = this._toggle(items);
+        this._raiseRemoved(modifiedItems.removed);
+        this._raiseAdded(modifiedItems.added);
     }
 
     on(event: SelectionEvent, callback: Callback<T>) {
-
+        this._events.subscribe(event, callback);
     }
 
     off(event: SelectionEvent, callback: Callback<T>) {
+        this._events.unsubscribe(event, callback);
+    }
 
+    raise(event: SelectionEvent, data: SelectionEventData<T>) {
+        this._events.publish(event, data);
+    }
+
+    private _calculateAddedItems(items: T[]) {
+        return items.filter(item => !this._items.has(item));
+    }
+
+    private _calculateRemovedItems(items: T[]) {
+        return items.filter(this._items.has);
+    }
+
+    private _raiseRemoved(removedItems: T[]) {
+        if (removedItems.length > 0) {
+            let eventData = <SelectionEventData<T>>{
+                selection: this,
+                items: removedItems
+            };
+            this.raise('removed', eventData);
+        }
+    }
+
+    private _raiseAdded(addedItems: T[]) {
+        if (addedItems.length > 0) {
+            let eventData = <SelectionEventData<T>>{
+                selection: this,
+                items: addedItems
+            };
+            this.raise('added', eventData);
+        }
     }
 }

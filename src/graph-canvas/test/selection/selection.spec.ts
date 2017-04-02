@@ -1,10 +1,19 @@
 import { ViewComponentContext } from './../../src/components/view-component';
 import { Selection, getSelection, SelectionEventData } from './../../src/selection/selection';
 
-let createSelectionForCallbackTests = () => {
-    let selection = new Selection();
-    spyOn(selection, 'on');
-    return selection;
+let createSelectionEventData = (selection: Selection<any>, items: any[]) => {
+    return <SelectionEventData<any>>{
+        selection: selection,
+        items: items
+    };
+};
+
+let createSpiedCallback = () => {
+    let callbackObject = {
+        callback: (data: SelectionEventData<any>) => { }
+    };
+    spyOn(callbackObject, 'callback');
+    return callbackObject.callback;
 };
 
 describe('getSelection', () => {
@@ -73,13 +82,22 @@ describe('Selection', () => {
             expect(selection.items).toEqual(item.expectedGet);
         });
 
-        it('calls change callback when changed', () => {
-            let selection = createSelectionForCallbackTests();
-            expect(selection.changed).toHaveBeenCalled()
+        it('raises added event', () => {
+            let selection = new Selection();
+            spyOn(selection, 'raise');
+            selection.add(1, 2);
+
+            let expectedData = createSelectionEventData(selection, [1, 2]);
+            expect(selection.raise).toHaveBeenCalledWith('added', expectedData);
+            expect(selection.raise).not.toHaveBeenCalledWith('removed', jasmine.any(Object));
         });
 
-        it('does not call change callback when not changed', () => {
-            throw new Error('not implemented');
+        it('does not raise added event when not changed', () => {
+            let selection = new Selection([1, 2]);
+            spyOn(selection, 'raise');
+            selection.add(1, 2);
+
+            expect(selection.raise).not.toHaveBeenCalled();
         });
     });
 
@@ -142,12 +160,26 @@ describe('Selection', () => {
             expect(selection.items).toEqual([]);
         });
 
-        it('calls change callback when changed', () => {
-            throw new Error('not implemented');
+        it('raises removed event', () => {
+            let selection = new Selection([1, 2]);
+            spyOn(selection, 'raise');
+
+            selection.clear();
+
+            expect(selection.raise).toHaveBeenCalledTimes(1);
+            expect(selection.raise).toHaveBeenCalledWith('removed', <SelectionEventData<any>>{
+                selection: selection,
+                items: [1, 2]
+            });
         });
 
-        it('does not call change callback when not changed', () => {
-            throw new Error('not implemented');
+        it('does not raise removed event when not changed', () => {
+            let selection = new Selection();
+            spyOn(selection, 'raise');
+
+            selection.clear();
+
+            expect(selection.raise).not.toHaveBeenCalled();
         });
     });
 
@@ -158,12 +190,26 @@ describe('Selection', () => {
             expect(selection.items).toEqual([1, 2, 3, 4]);
         });
 
-        it('calls change callback when changed', () => {
-            throw new Error('not implemented');
+        it('raises added event', () => {
+            let selection = new Selection();
+            spyOn(selection, 'raise');
+
+            selection.add(...[1, 2]);
+
+            expect(selection.raise).toHaveBeenCalledTimes(1);
+            expect(selection.raise).toHaveBeenCalledWith('added', <SelectionEventData<any>>{
+                selection: selection,
+                items: [1, 2]
+            });
         });
 
-        it('does not call change callback when not changed', () => {
-            throw new Error('not implemented');
+        it('does not raise added event when not changed', () => {
+            let selection = new Selection([1, 2]);
+            spyOn(selection, 'raise');
+
+            selection.add(...[1, 2]);
+
+            expect(selection.raise).not.toHaveBeenCalled();
         });
     });
 
@@ -186,48 +232,79 @@ describe('Selection', () => {
             expect(selection.items).toEqual([]);
         });
 
-        it('calls change callback when changed', () => {
-            throw new Error('not implemented');
+        it('raises added event', () => {
+            let selection = new Selection();
+            spyOn(selection, 'raise');
+
+            selection.toggle(...[1, 2]);
+
+            expect(selection.raise).toHaveBeenCalledTimes(1);
+            expect(selection.raise).toHaveBeenCalledWith('added', <SelectionEventData<any>>{
+                selection: selection,
+                items: [1, 2]
+            });
         });
 
-        it('does not call change callback when not changed', () => {
-            throw new Error('not implemented');
+        it('raises removed event', () => {
+            let selection = new Selection([1, 2]);
+            spyOn(selection, 'raise');
+
+            selection.toggle(...[1, 2]);
+
+            expect(selection.raise).toHaveBeenCalledTimes(1);
+            expect(selection.raise).toHaveBeenCalledWith('removed', <SelectionEventData<any>>{
+                selection: selection,
+                items: [1, 2]
+            });
+        });
+
+        it('does not raise change events when not changed', () => {
+            let selection = new Selection();
+            spyOn(selection, 'raise');
+
+            selection.toggle();
+
+            expect(selection.raise).not.toHaveBeenCalled();
         });
     });
 
     describe('raise', () => {
-        it('calls all appropriate callbacks', () => {
+        it('calls appropriate callbacks', () => {
             let selection = new Selection();
-            let callbackObject = {
-                callback: (data: SelectionEventData<any>) => { }
-            };
-            spyOn(callbackObject, 'callback');
-            selection.on('added', callbackObject.callback);
+            let callback = createSpiedCallback();
 
-            let data: SelectionEventData<any> = {
-                selectionId: 'selection',
-                selection: selection,
-                items: [1, 2]
-            };
+            selection.on('added', callback);
+            selection.on('removed', callback);
+
+            let data = createSelectionEventData(selection, [1, 2]);
             selection.raise('added', data);
-            selection.raise('removed', data);
 
-            expect(callbackObject.callback).toHaveBeenCalledTimes(1);
-            expect(callbackObject.callback).toHaveBeenCalledWith('added', data);
+            expect(callback).toHaveBeenCalledTimes(1);
+            expect(callback).toHaveBeenCalledWith(data);
         });
 
         it('does not fail if no change callbacks are specified', () => {
-            throw new Error('not implemented');
+            let selection = new Selection();
+            let data = createSelectionEventData(selection, [1, 2, 3]);
+            expect(() => selection.raise('added', data)).not.toThrow();
         });
     });
 
     describe('off', () => {
         it('removes the specified callback', () => {
-            throw new Error('not implemented');
+            let selection = new Selection();
+            let callback = createSpiedCallback();
+            selection.on('added', callback);
+            selection.off('added', callback);
+
+            selection.raise('added', createSelectionEventData(selection, [1, 2]));
+
+            expect(callback).not.toHaveBeenCalled();
         });
 
         it('does not fail if the specified callback was not registered', () => {
-            throw new Error('not implemented');
+            let selection = new Selection();
+            expect(() => selection.off('added', (data) => { })).not.toThrow();
         });
     });
 });
