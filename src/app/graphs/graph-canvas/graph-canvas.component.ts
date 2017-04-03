@@ -43,7 +43,7 @@ export class GraphCanvasComponent implements OnInit {
             .addPresenter(new RectanglePresenter())
             .addPresenter(new CirclePresenter())
           )
-          //.component(new RectangularSelectionComponent())
+          .component(new RectangularSelectionComponent())
           .component(new PickSelectionComponent())
       ];
       presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter, state: {} });
