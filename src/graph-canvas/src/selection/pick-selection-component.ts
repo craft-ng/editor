@@ -12,7 +12,7 @@ export class PickSelectionComponent extends ViewComponentBase {
 
         context.parent.selectAll('.gc-node')
             .on('mousedown', function (data: Node, index, group) {
-                toggleSelection(data, this, context)
+                toggleSelection(data, this, context);
             });
     }
 
@@ -28,7 +28,5 @@ export class PickSelectionComponent extends ViewComponentBase {
         context.d3.select(element)
             .classed('gc-node-selected', !isSelected);
         selection.toggle(data);
-
-        console.log(selection.items);
     }
 }

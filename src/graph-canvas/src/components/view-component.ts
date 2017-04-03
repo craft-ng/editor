@@ -1,3 +1,4 @@
+import { EventAggregator } from './../event-aggregator/event-aggregator';
 import { GraphPresenter } from './graph-presenter';
 import { Selection, D3 } from 'd3-ng2-service';
 export type D3Selection = Selection<any, any, any, any>;
@@ -5,6 +6,7 @@ export type D3Selection = Selection<any, any, any, any>;
 export function switchTo(originalContext: ViewComponentContext, newParent: D3Selection): ViewComponentContext {
     return {
         d3: originalContext.d3,
+        events: originalContext.events,
         graphPresenter: originalContext.graphPresenter,
         parent: newParent,
         state: originalContext.state
@@ -13,6 +15,7 @@ export function switchTo(originalContext: ViewComponentContext, newParent: D3Sel
 
 export interface ViewComponentContext {
     d3: D3;
+    events: EventAggregator,
     graphPresenter: GraphPresenter,
     parent: D3Selection,
     state: {}

@@ -1,3 +1,4 @@
+import { graphSelectionAdded, graphSelectionRemoved } from './../events';
 import { ViewComponentContext } from './../components/view-component';
 import { EventAggregator } from '../event-aggregator/event-aggregator';
 
@@ -5,6 +6,16 @@ export function getSelection(selectionId: string, context: ViewComponentContext)
     let selection: Selection<any> = context.state[selectionId];
     if (selection == null) {
         context.state[selectionId] = selection = new Selection<any>();
+
+        // Propagate added event to aggregator in the specified context
+        selection.on('added', selectionEvent => {
+            context.events.publish(graphSelectionAdded, selectionEvent);
+        });
+
+        // Propagate removed event to aggregator in the specified context
+        selection.on('removed', selectionEvent => {
+            context.events.publish(graphSelectionRemoved, selectionEvent);
+        });
     }
 
     return selection;
@@ -133,7 +144,7 @@ export class Selection<T> {
     }
 
     private _calculateRemovedItems(items: T[]) {
-        return items.filter(this._items.has);
+        return items.filter(item => this._items.has(item));
     }
 
     private _raiseRemoved(removedItems: T[]) {

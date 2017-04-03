@@ -1,3 +1,4 @@
+import { EventAggregator } from './../../src/event-aggregator/event-aggregator';
 import { ViewComponentContext } from './../../src/components/view-component';
 import { Selection, getSelection, SelectionEventData } from './../../src/selection/selection';
 
@@ -21,6 +22,7 @@ describe('getSelection', () => {
     beforeEach(() => {
         context = {
             d3: undefined,
+            events: new EventAggregator(),
             graphPresenter: undefined,
             parent: undefined,
             state: {}
@@ -43,6 +45,28 @@ describe('getSelection', () => {
         let selectionTwo = getSelection('id2', context);
         expect(selectionOne).not.toBe(selectionTwo);
         expect(selectionTwo).toBeTruthy();
+    });
+
+    it('returned selection raises event on context event aggregator when items are added', () => {
+        spyOn(context.events, 'publish');
+        let selection = getSelection('id', context);
+        selection.add(1, 2);
+        expect(context.events.publish).toHaveBeenCalledTimes(1);
+        expect(context.events.publish).toHaveBeenCalledWith(
+            'graph.selection.added',
+            createSelectionEventData(selection, [1, 2])
+        );
+    });
+
+    it('returned selection raises event on context event aggregator when items are removed', () => {
+        spyOn(context.events, 'publish');
+        let selection = getSelection('id', context);
+        selection.add(1, 2);
+        selection.remove(2);
+        expect(context.events.publish).toHaveBeenCalledWith(
+            'graph.selection.removed',
+            createSelectionEventData(selection, [2])
+        );
     });
 });
 
@@ -208,6 +232,46 @@ describe('Selection', () => {
             spyOn(selection, 'raise');
 
             selection.add(...[1, 2]);
+
+            expect(selection.raise).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('remove', () => {
+        it('removes items from selection', () => {
+            let selection = new Selection([1, 2, 3, 4, undefined]);
+            selection.remove(1, 4, undefined);
+            expect(selection.items).toEqual([2, 3]);
+        });
+
+        it('does not alter selection when removed item was not present', () => {
+            let selection = new Selection([1, 2]);
+            selection.remove(3, 4);
+            expect(selection.items).toEqual([1, 2]);
+        });
+
+        it('does not fail when executed on empty selection', () => {
+            let selection = new Selection();
+            expect(() => selection.remove(2)).not.toThrow();
+        });
+
+        it('raises removed event', () => {
+            let selection = new Selection([1, 2]);
+            spyOn(selection, 'raise');
+
+            selection.remove(2);
+
+            expect(selection.raise).toHaveBeenCalledWith(
+                'removed',
+                createSelectionEventData(selection, [2])
+            );
+        });
+
+        it('does not raise removed event when not changed', () => {
+            let selection = new Selection([1, 2]);
+            spyOn(selection, 'raise');
+
+            selection.remove(3);
 
             expect(selection.raise).not.toHaveBeenCalled();
         });

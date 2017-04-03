@@ -1,3 +1,4 @@
+import { EventAggregator } from './../../../graph-canvas/src/event-aggregator/event-aggregator';
 import { PickSelectionComponent } from './../../../graph-canvas/src/selection/pick-selection-component';
 import { RectangularSelectionComponent } from './../../../graph-canvas/src/selection/rectangular-selection-component';
 import { CirclePresenter } from './../../../graph-canvas/src/components/circle-presenter';
@@ -46,7 +47,13 @@ export class GraphCanvasComponent implements OnInit {
           .component(new RectangularSelectionComponent())
           .component(new PickSelectionComponent())
       ];
-      presenter.initialize({ d3: d3, parent: d3ParentElement, graphPresenter: presenter, state: {} });
+      presenter.initialize({
+        d3: d3,
+        parent: d3ParentElement,
+        graphPresenter: presenter,
+        state: {},
+        events: new EventAggregator()
+      });
     }
   }
 
